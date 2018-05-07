@@ -34,7 +34,6 @@ namespace TFR_noform
 		private Form1 form;
 		public Contract contractParser;
 
-
 		public Parser(Form1 Form) // Constructor
 		{
 			form = Form;
@@ -46,7 +45,6 @@ namespace TFR_noform
 			//In the API side, NASDAQ is always defined as ISLAND in the exchange field
 			contractParser.Exchange = "SMART"; // SMART ISLAND
 		}
-
 
 		public void MessageSearch()
 		{
@@ -110,16 +108,13 @@ namespace TFR_noform
 					{
 						try
 						{
-
 							Match match = Regex.Match(z.Text, @"(.+?PM|.+?AM)\s-\s(.+?)\s(\d+)\s.+?\s\$(.+)\sat\s(.+?)\s-\s(.+\s*.+)"); // Run through all found groups. Group - (). Regex online: https://regexr.com/																								
 							string price = match.Groups[5].Value; // Need to get rid of (,) otherwise double.parse throws a error
-																  //price = price.Replace('.', ','); // , Replace. Can be used in differen cultures enviroment
-
+							//price = price.Replace('.', ','); // , Replace. Can be used in differen cultures enviroment
 							message_text = match.Groups[6].Value; // Need to get rid of (') because when sentence "i don't need it" goes to SQL query (') it interpreted as a an escape symbol
 							message_text = message_text.Replace('\'', '*'); // Remove \ symbols from the parsed string. Otherwise - SQL error
-							//message_text = message_text.Truncate_x(255); // Crop the string to not longer than 255 sybols. Otherwise - SQL error
+							//message_text = message_text.Truncate_x(255); // Crop the string to not longer than 255 sybols. Otherwise - SQL error when string is longer than 255 symbols
 							
-
 							// Last message date detection. When new message appears - its date must be > than current. For this purpuse we need to record the date ol last detected message
 							// ! = "" There are other empty classes on the page. There are no message in them. Pass them
 							if (match.Groups[1].Value != "" && filter_couner < 5) // Read only 5 messages. Messgaes that are later than 5th belong to 2017. We do not need to read 2017
@@ -156,7 +151,7 @@ namespace TFR_noform
 										ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "********************ACTION: Bought", "green");
 										bougtMessageFlag = false;
 										messageTicker = match.Groups[4].Value;
-										form.textBox2.Text = match.Groups[4].Value;
+										//form.textBox2.Text = messageTicker; // Error is thrown. When this line is uncommet - page can not be parsed using existing regex
 
 										// DB Actions
 										//DataBase.InsertTicker(match.Groups[4].Value); // Added ticker, record created then update it
@@ -183,7 +178,7 @@ namespace TFR_noform
 									{
 										ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "********************ACTION: Sold", "red");
 										bougtMessageFlag = true;
-										form.textBox2.Text = "";
+										//form.textBox2.Text = "";
 
 										// DB Actions 
 										//DataBase.UpdateRecordClosePosition(DateTime.ParseExact(match.Groups[1].Value, "M/d h:mm:ss tt", CultureInfo.InvariantCulture), messageSoldVolume, Double.Parse(price), message_text);
@@ -207,17 +202,13 @@ namespace TFR_noform
 						{
 							ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "Regex error. Nothing to parse or content can't be parsed using existing regex", "red");
 						}
-
 					}
-
 				}
 				catch // var InputString
 				{
 					ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "Regex error. Chrome browser window is closed? Restart the program", "red");
 				}
-
 			}
-
 		}
 
 		/*
@@ -228,10 +219,7 @@ namespace TFR_noform
 			return value.Length <= maxLength ? value : value.Substring(0, maxLength);
 		}
 		*/
-
 	}
-
-
 }
 
 

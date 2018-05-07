@@ -16,7 +16,7 @@ namespace TFR_noform.Classes
 			contract.SecType = "STK";
 			contract.Currency = "USD";
 			//In the API side, NASDAQ is always defined as ISLAND in the exchange field
-			contract.Exchange = "ISLAND"; // SMART
+			contract.Exchange = "SMART"; // SMART
 
 			ibClient.ClientSocket.reqMktData((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds, contract, "", true, false, null); ; // Request market data for a contract https://interactivebrokers.github.io/tws-api/classIBApi_1_1EClient.html#a7a19258a3a2087c07c1c57b93f659b63
 		}

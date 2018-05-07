@@ -13,7 +13,7 @@ namespace TFR_noform
 		private static string jsString; // String for JS
 		private static List<string> elseMessages = new List<string>() { "Added", "Covered", "Shorted" }; // Collection other than bought and sold messages
 		private static int addedHouh = 0;
-		private static String symbol = "PHOT";
+		private static String symbol = "IBKR";
 
 		public static void Inject(string messageType, Form1 form)
 		{
@@ -28,11 +28,11 @@ namespace TFR_noform
 			{
 				case "bought":
 					//Console.WriteLine("bought case detected");
-					jsString = "var newItem = document.createElement('div'); newItem.style = ('background-color:green'); newItem.className = ('GLS-JUXDFAD'); newItem.innerHTML = ('<img src=\"./profitly_files/TimCover1_bigger.jpg\" width=50 height=50> 11/28 " + appendedTime + " - Bought 3000 of $" + symbol + " at 1.59 - text message'); var list = document.getElementById('x-auto-1'); list.insertBefore(newItem, list.childNodes[0]);";
+					jsString = "var newItem = document.createElement('div'); newItem.style = ('background-color:green'); newItem.className = ('GLS-JUXDFAD'); newItem.innerHTML = ('<img src=\"./profitly_files/TimCover1_bigger.jpg\" width=50 height=50> 11/28 " + appendedTime + " - Bought 3000 of $" + symbol + " at 21.45 - text message'); var list = document.getElementById('x-auto-1'); list.insertBefore(newItem, list.childNodes[0]);";
 					break;
 				case "sold":
 					//Console.WriteLine("sold case detected");
-					jsString = "var newItem = document.createElement('div'); newItem.style = ('background-color:red'); newItem.className = ('GLS-JUXDFAD'); newItem.innerHTML = ('<img src=\"./profitly_files/TimCover1_bigger.jpg\" width=50 height=50> 11/28 " + appendedTime + " - Sold 2000 of $" + symbol + " at 1.60 - text message'); var list = document.getElementById('x-auto-1'); list.insertBefore(newItem, list.childNodes[0]);";
+					jsString = "var newItem = document.createElement('div'); newItem.style = ('background-color:red'); newItem.className = ('GLS-JUXDFAD'); newItem.innerHTML = ('<img src=\"./profitly_files/TimCover1_bigger.jpg\" width=50 height=50> 11/28 " + appendedTime + " - Sold 2000 of $" + symbol + " at 22.18 - text message'); var list = document.getElementById('x-auto-1'); list.insertBefore(newItem, list.childNodes[0]);";
 					break;
 				case "else":
 					//Console.WriteLine("else case detected");
@@ -48,10 +48,7 @@ namespace TFR_noform
 			catch (Exception err)
 			{
 				ListViewLog.AddRecord(form, "parserListBox", "IngectTestMessage.cs", "Error: " + err, "red");
-				//Console.WriteLine("JS error. Can't inject test message" + err);
 			}
-
 		}
-
 	}
 }

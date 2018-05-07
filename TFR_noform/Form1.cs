@@ -81,6 +81,9 @@ namespace TFR_noform
 
 		private void IbClient_NextValidId(IBSampleApp.messages.ConnectionStatusMessage obj) // Api is connected
 		{
+			// 1 - Realtime, 2 - Frozen, 3 - Delayed data, 4 - Delayed frozen
+			ibClient.ClientSocket.reqMarketDataType(3); // https://interactivebrokers.github.io/tws-api/classIBApi_1_1EClient.html#ae03b31bb2702ba519ed63c46455872b6 
+
 			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "API connected: " + obj.IsConnected, "white");
 			isConnected = true;
 			if (obj.IsConnected)
@@ -88,8 +91,7 @@ namespace TFR_noform
 				status_CT.Text = "Connected";
 				button13.Text = "Disconnect";
 			}
-			// 1 - Realtime, 2 - Frozen, 3 - Delayed data, 4 - Delayed frozen
-			ibClient.ClientSocket.reqMarketDataType(3); // https://interactivebrokers.github.io/tws-api/classIBApi_1_1EClient.html#ae03b31bb2702ba519ed63c46455872b6 
+			
 		}
 
 		private void IbClient_TickPrice(IBSampleApp.messages.TickPriceMessage msg) // reqMktData event. Request market data event
@@ -102,7 +104,6 @@ namespace TFR_noform
 				Email.Send("Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (no round): " + calculatedVolume);
 
 				
-
 				// SEND ORDER GOES HERE
 				
 			}
