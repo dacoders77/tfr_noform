@@ -13,7 +13,7 @@ namespace TFR_noform
 		private static string jsString; // String for JS
 		private static List<string> elseMessages = new List<string>() { "Added", "Covered", "Shorted" }; // Collection other than bought and sold messages
 		private static int addedHouh = 0;
-		private static String symbol = "IBKR";
+		private static String symbol = "PHOT";
 
 		public static void Inject(string messageType, Form1 form)
 		{
@@ -28,7 +28,7 @@ namespace TFR_noform
 			{
 				case "bought":
 					//Console.WriteLine("bought case detected");
-					jsString = "var newItem = document.createElement('div'); newItem.style = ('background-color:green'); newItem.className = ('GLS-JUXDFAD'); newItem.innerHTML = ('<img src=\"./profitly_files/TimCover1_bigger.jpg\" width=50 height=50> 11/28 " + appendedTime + " - Bought 3000 of $" + symbol + " at 21.45 - text message'); var list = document.getElementById('x-auto-1'); list.insertBefore(newItem, list.childNodes[0]);";
+					jsString = "var newItem = document.createElement('div'); newItem.style = ('background-color:green'); newItem.className = ('GLS-JUXDFAD'); newItem.innerHTML = ('<img src=\"./profitly_files/TimCover1_bigger.jpg\" width=50 height=50> 11/28 " + appendedTime + " - Bought 2 of $" + symbol + " at 21.45 - text message'); var list = document.getElementById('x-auto-1'); list.insertBefore(newItem, list.childNodes[0]);";
 					break;
 				case "sold":
 					//Console.WriteLine("sold case detected");

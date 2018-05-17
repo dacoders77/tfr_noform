@@ -7,6 +7,8 @@ using IBApi;
 
 namespace TFR_noform.Classes
 {
+	// Move this class to ApiManager
+
 	class Quote
 	{
 		public static void Get(IBClient ibClient, string symbol)

@@ -91,11 +91,13 @@
 			this.button11 = new System.Windows.Forms.Button();
 			this.button10 = new System.Windows.Forms.Button();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.textBox3 = new System.Windows.Forms.TextBox();
 			this.button12 = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.status_CT = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.button14 = new System.Windows.Forms.Button();
+			this.button15 = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
@@ -647,6 +649,7 @@
 			this.button11.TabIndex = 1;
 			this.button11.Text = "Sell";
 			this.button11.UseVisualStyleBackColor = false;
+			this.button11.Click += new System.EventHandler(this.button11_Click);
 			// 
 			// button10
 			// 
@@ -657,6 +660,7 @@
 			this.button10.TabIndex = 0;
 			this.button10.Text = "Buy";
 			this.button10.UseVisualStyleBackColor = false;
+			this.button10.Click += new System.EventHandler(this.button10_Click);
 			// 
 			// groupBox8
 			// 
@@ -668,6 +672,14 @@
 			this.groupBox8.TabIndex = 38;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "Market data";
+			// 
+			// textBox3
+			// 
+			this.textBox3.Location = new System.Drawing.Point(6, 22);
+			this.textBox3.Name = "textBox3";
+			this.textBox3.Size = new System.Drawing.Size(82, 20);
+			this.textBox3.TabIndex = 3;
+			this.textBox3.Text = "PHOT";
 			// 
 			// button12
 			// 
@@ -713,19 +725,34 @@
 			this.label4.TabIndex = 39;
 			this.label4.Text = "API status:";
 			// 
-			// textBox3
+			// button14
 			// 
-			this.textBox3.Location = new System.Drawing.Point(6, 22);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(82, 20);
-			this.textBox3.TabIndex = 3;
-			this.textBox3.Text = "PHOT";
+			this.button14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+			this.button14.Location = new System.Drawing.Point(647, 517);
+			this.button14.Name = "button14";
+			this.button14.Size = new System.Drawing.Size(118, 23);
+			this.button14.TabIndex = 4;
+			this.button14.Text = "Set market data";
+			this.button14.UseVisualStyleBackColor = false;
+			this.button14.Click += new System.EventHandler(this.button14_Click);
+			// 
+			// button15
+			// 
+			this.button15.Location = new System.Drawing.Point(816, 512);
+			this.button15.Name = "button15";
+			this.button15.Size = new System.Drawing.Size(75, 23);
+			this.button15.TabIndex = 41;
+			this.button15.Text = "button15";
+			this.button15.UseVisualStyleBackColor = true;
+			this.button15.Click += new System.EventHandler(this.button15_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(956, 558);
+			this.Controls.Add(this.button15);
+			this.Controls.Add(this.button14);
 			this.Controls.Add(this.status_CT);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label5);
@@ -834,6 +861,8 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textBox3;
 		public System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.Button button14;
+		private System.Windows.Forms.Button button15;
 	}
 }
 

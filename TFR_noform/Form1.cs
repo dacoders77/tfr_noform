@@ -29,6 +29,7 @@ namespace TFR_noform
 		// API variables
 		private IBClient ibClient;
 		private EReaderMonitorSignal signal;
+		internal ApiManager apiManager; // Api features like search, place order, getQute etc.
 
 		private bool isConnected = false; // Connection flag. Prevents connect button click when connected
 		public Contract contract;
@@ -60,7 +61,8 @@ namespace TFR_noform
 			// IB API instances
 			signal = new EReaderMonitorSignal();
 			ibClient = new IBClient(signal);
-			
+			apiManager = new ApiManager(ibClient);
+
 			// Trade messages parser
 			parser = new Parser(this);
 
@@ -73,14 +75,46 @@ namespace TFR_noform
 			ibClient.OrderStatus += IbClient_OrderStatus; // Order status
 		}
 
-		private void IbClient_OrderStatus(IBSampleApp.messages.OrderStatusMessage obj) // Order status. Fires up when the order is executed
+		private void IbClient_CurrentTime(long obj) // Current exchange time request event
 		{
-			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "Order status. AvgFillPrice: " + obj.AvgFillPrice, "white");
-			Email.Send("Order status. AvgFillPrice: " + obj.AvgFillPrice);
+			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "Exchange current time:" + UnixTimeStampToDateTime(obj).ToString(), "white");
+		}
+
+		private void IbClient_MarketDataType(IBSampleApp.messages.MarketDataTypeMessage obj) // Market data type request event
+		{
+			if (obj.MarketDataType == 3)
+				ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "IbClient_MarketDataType: " + obj.MarketDataType + ". Delayed market data type", "white");
+		}
+
+		private void IbClient_Error(int arg1, int arg2, string arg3, Exception arg4) // Errors handling event
+		{
+			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "IbClient_Error: arg 1,2,3: " + arg1 + " " + arg2 + " " + arg3 + "exception: " + arg4, "white");
+		}
+
+		private void IbClient_TickPrice(IBSampleApp.messages.TickPriceMessage msg) // reqMktData event. reqMarketData Request market data event
+		{
+			//ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "TickPriceMessage. tick type: " + TickType.getField(msg.Field) + " price: " + msg.Price, "white");
+			if (TickType.getField(msg.Field) == "delayedLast")
+			{
+				double calculatedVolume = Settings.useFunds / (double)msg.Price;
+				int calculatedVolumeRounded = (int)Math.Floor(calculatedVolume);
+				ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "IbClient_TickPrice. Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (not rounded): " + calculatedVolume + " Rounded: " + calculatedVolumeRounded, "white");
+				Email.Send("Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (no round): " + calculatedVolume + " Rounded: " + calculatedVolumeRounded);
+
+
+				// SEND ORDER GOES HERE (close orders is sent from parser when close signal is detected)
+
+				apiManager.symbol = parser.contractParser.Symbol;
+				apiManager.volume = calculatedVolumeRounded;
+				apiManager.direction = "BUY";
+				apiManager.PlaceOrder();
+			}
 		}
 
 		private void IbClient_NextValidId(IBSampleApp.messages.ConnectionStatusMessage obj) // Api is connected
 		{
+			//MessageBox.Show("IbClient_NextValidId");
+
 			// 1 - Realtime, 2 - Frozen, 3 - Delayed data, 4 - Delayed frozen
 			ibClient.ClientSocket.reqMarketDataType(3); // https://interactivebrokers.github.io/tws-api/classIBApi_1_1EClient.html#ae03b31bb2702ba519ed63c46455872b6 
 
@@ -91,46 +125,29 @@ namespace TFR_noform
 				status_CT.Text = "Connected";
 				button13.Text = "Disconnect";
 			}
-			
+
 		}
 
-		private void IbClient_TickPrice(IBSampleApp.messages.TickPriceMessage msg) // reqMktData event. Request market data event
+		private void IbClient_OrderStatus(IBSampleApp.messages.OrderStatusMessage obj) // Order status. Fires up when the order is executed
 		{
-			//ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "TickPriceMessage. tick type: " + TickType.getField(msg.Field) + " price: " + msg.Price, "white");
-			if (TickType.getField(msg.Field) == "delayedLast")
-			{
-				double calculatedVolume = Settings.useFunds / (double)msg.Price;
-				ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "TickPriceMessage. Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (not rounded): " + calculatedVolume, "white");
-				Email.Send("Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (no round): " + calculatedVolume);
-
-				
-				// SEND ORDER GOES HERE
-				
-			}
+			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "Order status. AvgFillPrice: " + obj.AvgFillPrice, "white");
+			Email.Send("Order status. AvgFillPrice: " + obj.AvgFillPrice);
 		}
 
-		private void IbClient_Error(int arg1, int arg2, string arg3, Exception arg4) // Errors handling event
-		{
-			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "IbClient_Error: arg 1,2,3: " + arg1 + " " + arg2 + " " + arg3 + "exception: " + arg4, "white");
-		}
 
-		private void IbClient_MarketDataType(IBSampleApp.messages.MarketDataTypeMessage obj) // Market data type request event
-		{
-			if (obj.MarketDataType == 3)
-				ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", " IbClient_MarketDataType: " + obj.MarketDataType + ". Delayed market data type", "white");
-		}
 
-		private void IbClient_CurrentTime(long obj) // Current exchange time request event
-		{
-			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "Exchange current time:" + UnixTimeStampToDateTime(obj).ToString(), "white");
-		}
+
+
+
+
+
+
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			ListViewLog.AddRecord(this, "parserListBox", "Form1.cs", "Current culture:" + CultureInfo.CurrentCulture.Name, "white");
 			ListViewLog.AddRecord(this, "parserListBox", "Form1.cs", "Version: 07/05/2018 10:28PM", "white");
-
-			ChromeDriver.Navigate().GoToUrl("https://profit.ly/profiding"); // Go to URL file:///D:/1/profitly.html https://profit.ly/profiding
+			ChromeDriver.Navigate().GoToUrl("file:///D:/1/profitly.html"); // Go to URL file:///D:/1/profitly.html https://profit.ly/profiding
 
 		}
 
@@ -237,6 +254,33 @@ namespace TFR_noform
 		private void button2_Click(object sender, EventArgs e) // Stop bot button click
 		{
 			messageTrackingThread.Abort();
+		}
+
+		private void button14_Click(object sender, EventArgs e) // Set market data button click
+		{
+			MessageBox.Show("button14_Click. ibClient.ClientSocket.reqMarketDataType(3);");
+			ibClient.ClientSocket.reqMarketDataType(3);
+		}
+
+		private void button10_Click(object sender, EventArgs e) // Buy button click
+		{
+			apiManager.symbol = "PHOT";
+			apiManager.volume = 3;
+			apiManager.direction = "BUY";
+			apiManager.PlaceOrder();
+
+		}
+
+		private void button11_Click(object sender, EventArgs e) // Sell button click
+		{
+			apiManager.direction = "SELL";
+			apiManager.PlaceOrder();
+		}
+
+		private void button15_Click(object sender, EventArgs e) // Test button. Delete it
+		{
+			int calculatedVolumeRounded = (int)Math.Floor(2.56);
+			MessageBox.Show(calculatedVolumeRounded.ToString());
 		}
 	}
 }

@@ -32,6 +32,7 @@ namespace TFR_noform
 
 		private string message_text;
 		private Form1 form;
+		//!!!!internal ApiManager apiManager;
 		public Contract contractParser;
 
 		public Parser(Form1 Form) // Constructor
@@ -190,10 +191,14 @@ namespace TFR_noform
 										Email.Send("Sold action. Ticker: " + match.Groups[4].Value + ". Parsed price: " + Double.Parse(price));
 
 										// Add ticker to the contract
-										contractParser.Symbol = match.Groups[4].Value;
-										
+										//contractParser.Symbol = match.Groups[4].Value;
+
 										// Call request market data method. Created contract with a ticker is passed as a parameter 
-										form.reqMarketDataParser(contractParser);
+										//form.reqMarketDataParser(contractParser);
+
+										// CLOSE ORDER
+										form.apiManager.direction = "SELL";
+										form.apiManager.PlaceOrder();
 									}
 								}
 							}

@@ -1023,6 +1023,7 @@ namespace IBSampleApp
         {
             marketDataManager.unsetActive();
             int marketDataType = (int)((IBType)comboBoxMarketDataType_CDT.SelectedItem).Value;
+			MessageBox.Show("ccc: " + marketDataType);
             marketDataManager.RequestMarketDataType(marketDataType);
             showMarketDataTypeSelectMessage(marketDataType);
         }
@@ -1031,7 +1032,8 @@ namespace IBSampleApp
         {
             marketDataManager.setActive();
             int marketDataType = (int)((IBType)comboBoxMarketDataType_MDT.SelectedItem).Value;
-            marketDataManager.RequestMarketDataType(marketDataType);
+			MessageBox.Show("vvv: " + marketDataType);
+			marketDataManager.RequestMarketDataType(marketDataType);
             showMarketDataTypeSelectMessage(marketDataType);
         }
 

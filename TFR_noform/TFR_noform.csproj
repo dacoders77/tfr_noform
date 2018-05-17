@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\IBClient.cs" />
+    <Compile Include="Classes\ApiManager.cs" />
     <Compile Include="Classes\delete.cs" />
     <Compile Include="Classes\Email.cs" />
     <Compile Include="Classes\ListViewLog.cs" />

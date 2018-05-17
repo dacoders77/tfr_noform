@@ -7,6 +7,9 @@ using IBApi;
 
 namespace TFR_noform.Classes
 {
+
+	// DELETE THIS CLASS! 
+
 	public static class PlaceOrder
 	{
 		private static IBClient ibClient;
