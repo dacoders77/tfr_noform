@@ -146,7 +146,7 @@ namespace TFR_noform
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			ListViewLog.AddRecord(this, "parserListBox", "Form1.cs", "Current culture:" + CultureInfo.CurrentCulture.Name, "white");
-			ListViewLog.AddRecord(this, "parserListBox", "Form1.cs", "Version: 17/05/2018 08:28PM", "white");
+			ListViewLog.AddRecord(this, "parserListBox", "Form1.cs", "Version: 18/05/2018 04:39PM", "white");
 			//ChromeDriver.Navigate().GoToUrl("https://profit.ly/profiding"); // Go to URL file:///D:/1/profitly.html https://profit.ly/profiding
 			ChromeDriver.Navigate().GoToUrl("file:///D:/1/profitly.html"); // 
 

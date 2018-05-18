@@ -209,7 +209,8 @@ namespace TFR_noform
 							ListViewLog.AddRecord(form, "parserListBox", "Parser.cs", "Regex error. Nothing to parse or content can't be parsed using existing regex", "red");
 							// ADD ALERT EMAIL HERE
 							Email.Send("Regex error", "Parser.cs, Regex error.Nothing to parse or content cant be parsed using existing regex");
-							Environment.Exit(1); // Die
+							//Environment.Exit(1); // Die
+							System.Windows.Forms.MessageBox.Show("Parser.cs regex error line 213");
 						}
 					}
 				}
@@ -218,7 +219,8 @@ namespace TFR_noform
 					ListViewLog.AddRecord(form, "parserListBox", "Parser.cs", "Regex error. Chrome browser window is closed? Restart the program", "red");
 					// ADD ALERT EMAIL HERE
 					Email.Send("Regex erro. No window", "Parser.cs, Regex error.Nothing to parse or content cant be parsed using existing regex");
-					Environment.Exit(1); // Die
+					//Environment.Exit(1); // Die
+					System.Windows.Forms.MessageBox.Show("Parser.cs regex error2 line 223");
 				}
 			}
 		}
