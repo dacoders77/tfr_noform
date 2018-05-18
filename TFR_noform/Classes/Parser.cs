@@ -162,7 +162,7 @@ namespace TFR_noform
 										// Boroker actions
 
 										//form.placeOrder.SendOrder("buy", match.Groups[4].Value); // Send BUY order to the exchange
-										Email.Send("Bought action. Ticker: " + match.Groups[4].Value + ". Parsed price: " + Double.Parse(price));
+										Email.Send("Bought", "Bought action. Ticker: " + match.Groups[4].Value + ". Parsed price: " + Double.Parse(price));
 
 										// Add ticker to the contract
 										contractParser.Symbol = match.Groups[4].Value;
@@ -188,7 +188,7 @@ namespace TFR_noform
 
 										// Boroker actions
 										//form.placeOrder.SendOrder("sell", match.Groups[4].Value); // Send SELL order to the exchange
-										Email.Send("Sold action. Ticker: " + match.Groups[4].Value + ". Parsed price: " + Double.Parse(price));
+										Email.Send("Sold", "Sold action. Ticker: " + match.Groups[4].Value + ". Parsed price: " + Double.Parse(price));
 
 										// Add ticker to the contract
 										//contractParser.Symbol = match.Groups[4].Value;
@@ -199,19 +199,26 @@ namespace TFR_noform
 										// CLOSE ORDER
 										form.apiManager.direction = "SELL";
 										form.apiManager.PlaceOrder();
+										
 									}
 								}
 							}
 						}
 						catch
 						{
-							ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "Regex error. Nothing to parse or content can't be parsed using existing regex", "red");
+							ListViewLog.AddRecord(form, "parserListBox", "Parser.cs", "Regex error. Nothing to parse or content can't be parsed using existing regex", "red");
+							// ADD ALERT EMAIL HERE
+							Email.Send("Regex error", "Parser.cs, Regex error.Nothing to parse or content cant be parsed using existing regex");
+							Environment.Exit(1); // Die
 						}
 					}
 				}
 				catch // var InputString
 				{
-					ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "Regex error. Chrome browser window is closed? Restart the program", "red");
+					ListViewLog.AddRecord(form, "parserListBox", "Parser.cs", "Regex error. Chrome browser window is closed? Restart the program", "red");
+					// ADD ALERT EMAIL HERE
+					Email.Send("Regex erro. No window", "Parser.cs, Regex error.Nothing to parse or content cant be parsed using existing regex");
+					Environment.Exit(1); // Die
 				}
 			}
 		}

@@ -99,7 +99,7 @@ namespace TFR_noform
 				double calculatedVolume = Settings.useFunds / (double)msg.Price;
 				int calculatedVolumeRounded = (int)Math.Floor(calculatedVolume);
 				ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "IbClient_TickPrice. Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (not rounded): " + calculatedVolume + " Rounded: " + calculatedVolumeRounded, "white");
-				Email.Send("Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (no round): " + calculatedVolume + " Rounded: " + calculatedVolumeRounded);
+				Email.Send("Volume", "Funds to use: " + Settings.useFunds + "$ Ticker: " + parser.contractParser.Symbol + " Price: " + msg.Price + " Calculated volume (no round): " + calculatedVolume + " Rounded: " + calculatedVolumeRounded);
 
 
 				// SEND ORDER GOES HERE (close orders is sent from parser when close signal is detected)
@@ -131,7 +131,7 @@ namespace TFR_noform
 		private void IbClient_OrderStatus(IBSampleApp.messages.OrderStatusMessage obj) // Order status. Fires up when the order is executed
 		{
 			ListViewLog.AddRecord(this, "brokerListBox", "Form1.cs", "Order status. AvgFillPrice: " + obj.AvgFillPrice, "white");
-			Email.Send("Order status. AvgFillPrice: " + obj.AvgFillPrice);
+			Email.Send("Order status", "Order status. AvgFillPrice: " + obj.AvgFillPrice);
 		}
 
 
@@ -147,7 +147,8 @@ namespace TFR_noform
 		{
 			ListViewLog.AddRecord(this, "parserListBox", "Form1.cs", "Current culture:" + CultureInfo.CurrentCulture.Name, "white");
 			ListViewLog.AddRecord(this, "parserListBox", "Form1.cs", "Version: 17/05/2018 08:28PM", "white");
-			ChromeDriver.Navigate().GoToUrl("https://profit.ly/profiding"); // Go to URL file:///D:/1/profitly.html https://profit.ly/profiding
+			//ChromeDriver.Navigate().GoToUrl("https://profit.ly/profiding"); // Go to URL file:///D:/1/profitly.html https://profit.ly/profiding
+			ChromeDriver.Navigate().GoToUrl("file:///D:/1/profitly.html"); // 
 
 		}
 

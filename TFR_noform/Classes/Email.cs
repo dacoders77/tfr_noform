@@ -13,13 +13,13 @@ namespace TFR_noform
 {
 	class Email
 	{
-		public static void Send(string emailBody)
+		public static void Send(string topic, string emailBody)
 		{
 			var message = new MimeMessage();
 			message.From.Add(new MailboxAddress(Settings.emailFromName, Settings.emailFromEmail));
 			message.To.Add(new MailboxAddress(Settings.emailTo, Settings.emailTo));
 			message.To.Add(new MailboxAddress(Settings.emailCopyName, Settings.emailCopy));
-			message.Subject = "TFR BOT Message";
+			message.Subject = "TFR: " + topic;
 			message.Body = new TextPart("plain")
 			{
 				Text = emailBody
