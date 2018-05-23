@@ -53,7 +53,7 @@ namespace TFR_noform
 			while (true) // Continues cycle. Each iteration reads the page content
 			{
 				System.Threading.Thread.Sleep(1000); // The delay between each page parse. 1000 - 1 sec
-				//ListViewLogging.log_add(form, "GetAndTrackMessages.cs", "Page parsed at: " + DateTime.Now.ToString("hh.mm.ss.fff"), "white");
+				//ListViewLogging.log_add(form, "parser.cs", "Page parsed at: " + DateTime.Now.ToString("hh.mm.ss.fff"), "white");
 
 				form.BeginInvoke(new Action(delegate ()
 				{
@@ -73,7 +73,7 @@ namespace TFR_noform
 
 				if (firstMessageDisplayed)  // Last line is not cleared at the first run
 				{
-					//ListViewLogging.log_add(form, "GetAndTrackMessages.cs", "Console.SetCursorPosition(0, Console.CursorTop - 1); // Returned cursor to the previous line", "white");
+					//ListViewLogging.log_add(form, "parser.cs", "Console.SetCursorPosition(0, Console.CursorTop - 1); // Returned cursor to the previous line", "white");
 					//Helpers.ClearCurrentConsoleLine(); // Clear last line with parsed time
 				}
 
@@ -127,11 +127,11 @@ namespace TFR_noform
 								{
 									lastMessageDate = DateTime.ParseExact(match.Groups[1].Value, "M/d h:mm:ss tt", CultureInfo.InvariantCulture);
 									//Console.WriteLine("Tracking messages started. First run. Last message date: " + match.Groups[1].Value);
-									ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "Tracking messages started. First run. Last message date: " + match.Groups[1].Value, "white");
+									ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "Tracking messages started. First run. Last message date: " + match.Groups[1].Value, "white");
 									firstRunFlag = false;
 
-									ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "Date added. New added message with date later than this is considered as new: " + lastMessageDate.AddMinutes(1).ToString("h:mm:ss tt"), "white");
-									ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "Last message parsing example. This output must be the same as the message at the page. Is everything correct?\nDate: " + match.Groups[1].Value + "\nDirection: " + match.Groups[2].Value + "\nQuantity: " + match.Groups[3].Value + "\nTicker: " + match.Groups[4].Value + "\nPrice: " + Double.Parse(price), "white");
+									ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "Date added. New added message with date later than this is considered as new: " + lastMessageDate.AddMinutes(1).ToString("h:mm:ss tt"), "white");
+									ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "Last message parsing example. This output must be the same as the message at the page. Is everything correct?\nDate: " + match.Groups[1].Value + "\nDirection: " + match.Groups[2].Value + "\nQuantity: " + match.Groups[3].Value + "\nTicker: " + match.Groups[4].Value + "\nPrice: " + Double.Parse(price), "white");
 
 									//Console.WriteLine("Date added. New added message with date later than this is considered as new: " + GetAndTrackMMessages.lastMessageDate.AddMinutes(1).ToString("h:mm:ss tt")); // DateTime.Now.Date.ToString("MM/dd/yyyy")
 									//Console.WriteLine("Last message parsing example. This output must be the same as the message at the page. Is everything correct?\nDate: " + match.Groups[1].Value + "\nDirection: " + match.Groups[2].Value + "\nQuantity: " + match.Groups[3].Value + "\nTicker: " + match.Groups[4].Value + "\nPrice: " + Double.Parse(price));
@@ -143,13 +143,13 @@ namespace TFR_noform
 								//Console.WriteLine("TRACE: DateTime.Compare(h, lastMessageDate) > 0: " + (DateTime.Compare(h, lastMessageDate) > 0) + ". h: " + h + ". lastMessageDate: " + lastMessageDate);
 								if (DateTime.Compare(h, lastMessageDate) > 0)
 								{
-									ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "New message on the page is detected!", "white");
+									ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "New message on the page is detected!", "white");
 									lastMessageDate = DateTime.ParseExact(match.Groups[1].Value, "M/d h:mm:ss tt", CultureInfo.InvariantCulture);
 
 									// Bought
 									if (match.Groups[2].Value == "Bought" && bougtMessageFlag == true)
 									{
-										ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "********************ACTION: Bought", "green");
+										ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "********************ACTION: Bought", "green");
 										bougtMessageFlag = false;
 										messageTicker = match.Groups[4].Value;
 										//form.textBox2.Text = messageTicker; // Error is thrown. When this line is uncommet - page can not be parsed using existing regex
@@ -177,7 +177,7 @@ namespace TFR_noform
 									// Sold
 									if (match.Groups[2].Value == "Sold" && messageTicker == match.Groups[4].Value && bougtMessageFlag == false)
 									{
-										ListViewLog.AddRecord(form, "parserListBox", "GetAndTrackMessages.cs", "********************ACTION: Sold", "red");
+										ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "********************ACTION: Sold", "red");
 										bougtMessageFlag = true;
 										//form.textBox2.Text = "";
 
@@ -207,10 +207,11 @@ namespace TFR_noform
 						catch
 						{
 							ListViewLog.AddRecord(form, "parserListBox", "Parser.cs", "Regex error. Nothing to parse or content can't be parsed using existing regex", "red");
+							ListViewLog.AddRecord(form, "parserListBox", "Parser.cs", "Parsed string: " + z, "red");
 							// ADD ALERT EMAIL HERE
-							Email.Send("Regex error", "Parser.cs, Regex error.Nothing to parse or content cant be parsed using existing regex");
+							Email.Send("Regex error", "Parser.cs, Regex error.Nothing to parse or content cant be parsed using existing regex. Parsed string: " + z);
 							//Environment.Exit(1); // Die
-							System.Windows.Forms.MessageBox.Show("Parser.cs regex error line 213");
+							System.Windows.Forms.MessageBox.Show("Parser.cs regex error line 213. parsed string: " + z);
 						}
 					}
 				}
