@@ -50,7 +50,7 @@ namespace TFR_noform
 		public void MessageSearch()
 		{
 
-			while (true) // Continues cycle. Each iteration reads the page content
+			while (true) // Endless cycle. Each iteration reads the page content
 			{
 				System.Threading.Thread.Sleep(1000); // The delay between each page parse. 1000 - 1 sec
 				//ListViewLogging.log_add(form, "parser.cs", "Page parsed at: " + DateTime.Now.ToString("hh.mm.ss.fff"), "white");
@@ -103,7 +103,12 @@ namespace TFR_noform
 
 				try
 				{
-					var InputString = Form1.ChromeDriver.FindElementsByClassName("GLS-JUXDFAD");
+					//var InputString = Form1.ChromeDriver.FindElementsByClassName("GLS-JUXDFAD");
+					var InputString = Form1.ChromeDriver.FindElementsByCssSelector(".GLS-JUXDFAD");
+		
+					//ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "parsed with css: " + InputString.ToString(), "white");
+					//ListViewLog.AddRecord(form, "parserListBox", "parser.cs", "type: " + InputString2.GetType(), "white");
+
 
 					foreach (var z in InputString) // Run cycle through all found elements on the page
 					{
@@ -213,7 +218,7 @@ namespace TFR_noform
 							//Environment.Exit(1); // Die
 							System.Windows.Forms.MessageBox.Show("Parser.cs regex error line 213. parsed string: " + z);
 						}
-					}
+					} // for
 				}
 				catch // var InputString
 				{
